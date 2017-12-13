@@ -1,9 +1,48 @@
-call clean.cmd
+@echo off
 
-git clone https://github.com/flyway/flyway.git --depth=1
+if [%1]==[] goto :noversion
 
-cd flyway
-call mvn versions:set -DnewVersion=%1
-call mvn -PCommandlinePlatformAssemblies deploy scm:tag -DperformRelease=true -DskipTests
+setlocal
+
+SET CURRENT_DIR=%cd%
+
+echo ============== RELEASE START
+
+echo ============== CLEANING
+call clean.cmd || goto :error
+
+echo ============== CLONING MASTER
+git clone https://github.com/boxfuse/flyway-master.git --depth=1 || goto :error
+echo ============== CLONING OSSIFIER
+git clone https://github.com/boxfuse/flyway-ossifier.git --depth=1 || goto :error
+
+echo ============== BUILDING MASTER
+cd flyway-master
+call mvn versions:set -DnewVersion=%1 || goto :error
+REM call mvn -PCommandlinePlatformAssemblies deploy scm:tag -DperformRelease=true -DskipTests
 cd ..
-call gradlew clean publishPlugins -Dversion=%1
+
+echo ============== OSSIFYING
+call ossify.cmd || goto :error
+
+echo ============== DEPLOYING
+call deploy.cmd %1 || goto :error
+cd gradle-plugin-publishing
+REM call gradlew clean publishPlugins -Dversion=%1
+cd ..
+
+echo ============== RELEASE SUCCESS
+cd "%CURRENT_DIR%"
+goto :EOF
+
+
+:error
+echo ============== RELEASE FAILED WITH ERROR %errorlevel%
+cd "%CURRENT_DIR%"
+pause
+exit /b %errorlevel%
+
+:noversion
+echo ERROR: Missing version!
+echo USAGE: release.cmd 1.2.3
+exit /b 1
