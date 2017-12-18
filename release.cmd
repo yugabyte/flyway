@@ -8,13 +8,8 @@ SET CURRENT_DIR=%cd%
 
 echo ============== RELEASE START
 
-echo ============== CLEANING
-call clean.cmd || goto :error
-
-echo ============== CLONING MASTER
-git clone https://github.com/boxfuse/flyway-master.git --depth=1 || goto :error
-echo ============== CLONING OSSIFIER
-git clone https://github.com/boxfuse/flyway-ossifier.git --depth=1 || goto :error
+echo ============== CLONING
+call clone.cmd || goto :error
 
 echo ============== BUILDING MASTER
 cd flyway-master
