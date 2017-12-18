@@ -9,14 +9,10 @@ SET CURRENT_DIR=%cd%
 echo ============== DEPLOY START
 
 echo ============== DEPLOYING PRO
-cd flyway-pro
-call deploy.cmd %1 || goto :error
-cd ..
+call deployEdition.cmd %1 pro || goto :error
 
 echo ============== DEPLOYING ENTERPRISE
-cd flyway-pro
-call deploy.cmd %1 || goto :error
-cd ..
+call deployEdition.cmd %1 enterprise || goto :error
 
 echo ============== DEPLOY SUCCESS
 cd "%CURRENT_DIR%"
