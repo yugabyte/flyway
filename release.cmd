@@ -36,10 +36,11 @@ goto :EOF
 
 
 :error
-echo ============== RELEASE FAILED WITH ERROR %errorlevel%
+set ERRORLVL=%errorlevel%
+echo ============== RELEASE FAILED WITH ERROR %ERRORLVL%
 cd "%CURRENT_DIR%"
 pause
-exit /b %errorlevel%
+exit /b %ERRORLVL%
 
 :noversion
 echo ERROR: Missing version!

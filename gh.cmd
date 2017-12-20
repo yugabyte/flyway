@@ -64,7 +64,8 @@ cd "%CURRENT_DIR%"
 goto :EOF
 
 :error
-echo ============== GH FAILED WITH ERROR %errorlevel%
+set ERRORLVL=%errorlevel%
+echo ============== GH FAILED WITH ERROR %ERRORLVL%
 cd "%CURRENT_DIR%"
 pause
-exit /b %errorlevel%
+exit /b %ERRORLVL%

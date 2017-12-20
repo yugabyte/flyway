@@ -29,5 +29,6 @@ echo ============== CLEANING SUCCESS
 goto :EOF
 
 :error
-echo ============== CLEANING FAILED WITH ERROR %errorlevel%
-exit /b %errorlevel%
+set ERRORLVL=%errorlevel%
+echo ============== CLEANING FAILED WITH ERROR %ERRORLVL%
+exit /b %ERRORLVL%

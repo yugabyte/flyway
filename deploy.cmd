@@ -8,6 +8,22 @@ SET CURRENT_DIR=%cd%
 
 echo ============== DEPLOY START
 
+echo ============== DELETING EXISTING GH REPO
+cd ..
+if exist flyway (
+  rmdir flyway /s /q || goto :error
+)
+
+echo ============== CHECKING OUT CURRENT GH REPO
+git clone https://github.com/flyway/flyway || goto :error
+cd flyway
+
+echo ============== VERSIONING COMMUNITY
+call mvn versions:set -DnewVersion=%1 || goto :error
+echo ============== DEPLOYING COMMUNITY
+call mvn -PCommandlinePlatformAssemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
+cd "%CURRENT_DIR%"
+
 echo ============== DEPLOYING PRO
 call deployEdition.cmd %1 pro || goto :error
 
@@ -19,9 +35,10 @@ cd "%CURRENT_DIR%"
 goto :EOF
 
 :error
-echo ============== DEPLOY FAILED WITH ERROR %errorlevel%
+set ERRORLVL=%errorlevel%
+echo ============== DEPLOY FAILED WITH ERROR %ERRORLVL%
 cd "%CURRENT_DIR%"
-exit /b %errorlevel%
+exit /b %ERRORLVL%
 
 :noversion
 echo ERROR: Missing version!

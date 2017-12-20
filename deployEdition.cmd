@@ -33,9 +33,10 @@ cd "%CURRENT_DIR%"
 goto :EOF
 
 :error
-echo ============== DEPLOY %2 FAILED WITH ERROR %errorlevel%
+set ERRORLVL=%errorlevel%
+echo ============== DEPLOY %2 FAILED WITH ERROR %ERRORLVL%
 cd "%CURRENT_DIR%"
-exit /b %errorlevel%
+exit /b %ERRORLVL%
 
 :usage
 echo ERROR: Missing version or edition!
