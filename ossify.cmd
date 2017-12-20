@@ -55,7 +55,8 @@ cd "%CURRENT_DIR%"
 goto :EOF
 
 :error
-echo ============== OSSIFY FAILED WITH ERROR %errorlevel%
+set ERRORLVL=%errorlevel%
+echo ============== OSSIFY FAILED WITH ERROR %ERRORLVL%
 cd "%CURRENT_DIR%"
 pause
-exit /b %errorlevel%
+exit /b %ERRORLVL%
