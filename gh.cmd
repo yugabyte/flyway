@@ -22,6 +22,12 @@ SET CURRENT_DIR=%cd%
 
 echo ============== GH START
 
+echo ============== DELETING EXISTING GH REPO
+cd ..
+if exist flyway (
+  rmdir flyway /s /q || goto :error
+)
+
 echo ============== CLONING
 call clone.cmd || goto :error
 
@@ -32,12 +38,6 @@ cd ..
 
 echo ============== OSSIFYING
 call ossify.cmd || goto :error
-
-echo ============== DELETING EXISTING GH REPO
-cd ..
-if exist flyway (
-  rmdir flyway /s /q || goto :error
-)
 
 echo ============== CHECKING OUT CURRENT GH REPO
 git clone https://github.com/flyway/flyway --depth=1 || goto :error
