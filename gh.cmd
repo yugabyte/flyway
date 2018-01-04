@@ -27,6 +27,7 @@ cd ..
 if exist flyway (
   rmdir flyway /s /q || goto :error
 )
+cd "%CURRENT_DIR%"
 
 echo ============== CLONING
 call clone.cmd || goto :error
@@ -40,6 +41,7 @@ echo ============== OSSIFYING
 call ossify.cmd || goto :error
 
 echo ============== CHECKING OUT CURRENT GH REPO
+cd ..
 git clone https://github.com/flyway/flyway --depth=1 || goto :error
 
 echo ============== DELETING EXISTING GH SOURCES
