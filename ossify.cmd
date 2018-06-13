@@ -30,19 +30,19 @@ java -jar target\flyway-ossifier-1.0-SNAPSHOT.jar "%CURRENT_DIR%" || goto :error
 
 echo ============== BUILDING PRO
 cd "%CURRENT_DIR%\flyway-pro"
-call mvn -PCommandlinePlatformAssemblies clean install javadoc:jar -T3 || goto :error
+call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 cd flyway-distribution
 call mvn clean package || goto :error
 
 echo ============== BUILDING ENTERPRISE
 cd "%CURRENT_DIR%\flyway-enterprise"
-call mvn -PCommandlinePlatformAssemblies clean install javadoc:jar -T3 || goto :error
+call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 cd flyway-distribution
 call mvn clean package || goto :error
 
 echo ============== BUILDING TRIAL
 cd "%CURRENT_DIR%\flyway-trial"
-call mvn -PCommandlinePlatformAssemblies clean install javadoc:jar -T3 || goto :error
+call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 cd flyway-distribution
 call mvn clean package || goto :error
 
