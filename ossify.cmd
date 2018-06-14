@@ -48,7 +48,7 @@ call mvn clean package || goto :error
 
 echo ============== BUILDING COMMUNITY
 cd "%CURRENT_DIR%\flyway"
-call mvn clean install javadoc:jar -T3 || goto :error
+call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 
 echo ============== OSSIFY SUCCESS
 cd "%CURRENT_DIR%"
