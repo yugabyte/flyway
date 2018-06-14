@@ -34,7 +34,7 @@ call clone.cmd || goto :error
 
 echo ============== BUILDING MASTER
 cd flyway-master
-call mvn -PCommandlinePlatformAssemblies install -DskipTests || goto :error
+call mvn -Pbuild-assemblies install -DskipTests || goto :error
 cd ..
 
 echo ============== OSSIFYING
