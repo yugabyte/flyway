@@ -21,7 +21,7 @@ setlocal
 if [%1]==[] (
   set FLYWAY_BRANCH=master
 ) else (
-  set FLYWAY_BRANCH=%2
+  set FLYWAY_BRANCH=%1
 )
 
 SET CURRENT_DIR=%cd%
