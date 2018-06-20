@@ -26,7 +26,7 @@ call ossify.cmd || goto :error
 
 echo ============== BUILDING MASTER
 cd flyway-master
-call mvn -PCommandlinePlatformAssemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
+call mvn -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
 cd ..
 
 echo ============== DEPLOYING

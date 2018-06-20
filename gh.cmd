@@ -18,6 +18,12 @@
 
 setlocal
 
+if [%1]==[] (
+  set FLYWAY_BRANCH=master
+) else (
+  set FLYWAY_BRANCH=%2
+)
+
 SET CURRENT_DIR=%cd%
 
 echo ============== GH START
@@ -30,7 +36,7 @@ if exist flyway (
 cd "%CURRENT_DIR%"
 
 echo ============== CLONING
-call clone.cmd || goto :error
+call clone.cmd %FLYWAY_BRANCH% || goto :error
 
 echo ============== BUILDING MASTER
 cd flyway-master
@@ -42,7 +48,7 @@ call ossify.cmd || goto :error
 
 echo ============== CHECKING OUT CURRENT GH REPO
 cd ..
-git clone https://github.com/flyway/flyway --depth=1 || goto :error
+git clone -b %FLYWAY_BRANCH% https://github.com/flyway/flyway --depth=1 || goto :error
 
 echo ============== DELETING EXISTING GH SOURCES
 DEL /Q flyway\*.* || goto :error
