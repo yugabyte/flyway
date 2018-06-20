@@ -1,6 +1,11 @@
 @echo off
 
 if [%1]==[] goto :noversion
+if [%2]==[] (
+  set FLYWAY_BRANCH=master
+) else (
+  set FLYWAY_BRANCH=%2
+)
 
 setlocal
 
@@ -14,8 +19,8 @@ if exist flyway (
   rmdir flyway /s /q || goto :error
 )
 
-echo ============== CHECKING OUT CURRENT GH REPO
-git clone https://github.com/flyway/flyway || goto :error
+echo ============== CHECKING OUT CURRENT GH REPO (Git Branch: %FLYWAY_BRANCH%)
+git clone -b %FLYWAY_BRANCH% https://github.com/flyway/flyway || goto :error
 cd flyway
 
 echo ============== VERSIONING COMMUNITY

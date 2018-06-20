@@ -1,15 +1,20 @@
 @echo off
 
 if [%1]==[] goto :noversion
+if [%2]==[] (
+  set FLYWAY_BRANCH=master
+) else (
+  set FLYWAY_BRANCH=%2
+)
 
 setlocal
 
 SET CURRENT_DIR=%cd%
 
-echo ============== RELEASE START
+echo ============== RELEASE START (Version: %1, Git Branch: %FLYWAY_BRANCH%)
 
 echo ============== CLONING
-call clone.cmd || goto :error
+call clone.cmd %FLYWAY_BRANCH% || goto :error
 
 echo ============== VERSIONING MASTER
 cd flyway-master
@@ -25,7 +30,7 @@ call mvn -PCommandlinePlatformAssemblies deploy scm:tag -DperformRelease=true -D
 cd ..
 
 echo ============== DEPLOYING
-call deploy.cmd %1 || goto :error
+call deploy.cmd %1 %FLYWAY_BRANCH% || goto :error
 cd gradle-plugin-publishing
 call gradlew clean publishPlugins -Dversion=%1
 cd ..
