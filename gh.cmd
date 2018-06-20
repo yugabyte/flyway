@@ -26,7 +26,7 @@ if [%1]==[] (
 
 SET CURRENT_DIR=%cd%
 
-echo ============== GH START
+echo ============== GH START (Git Branch: %FLYWAY_BRANCH%)
 
 echo ============== DELETING EXISTING GH REPO
 cd ..
@@ -46,7 +46,7 @@ cd ..
 echo ============== OSSIFYING
 call ossify.cmd || goto :error
 
-echo ============== CHECKING OUT CURRENT GH REPO
+echo ============== CHECKING OUT CURRENT GH REPO (Git Branch: %FLYWAY_BRANCH%)
 cd ..
 git clone -b %FLYWAY_BRANCH% https://github.com/flyway/flyway --depth=1 || goto :error
 
