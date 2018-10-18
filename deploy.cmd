@@ -29,6 +29,9 @@ echo ============== DEPLOYING COMMUNITY
 call mvn -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
 cd "%CURRENT_DIR%"
 
+echo ============== DEPLOYING TRIAL
+call deployTrial.cmd %1 || goto :error
+
 echo ============== DEPLOYING PRO
 call deployEdition.cmd %1 pro || goto :error
 
