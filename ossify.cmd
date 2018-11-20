@@ -40,12 +40,6 @@ call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 cd flyway-distribution
 call mvn clean package || goto :error
 
-echo ============== BUILDING TRIAL
-cd "%CURRENT_DIR%\flyway-trial"
-call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
-cd flyway-distribution
-call mvn clean package || goto :error
-
 echo ============== BUILDING COMMUNITY
 cd "%CURRENT_DIR%\flyway"
 call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error

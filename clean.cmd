@@ -20,10 +20,6 @@ echo ============== CLEANING ENTERPRISE
 if exist flyway-enterprise (
   rmdir /s/q flyway-enterprise || goto :error
 )
-echo ============== CLEANING TRIAL
-if exist flyway-trial (
-  rmdir /s/q flyway-trial || goto :error
-)
 
 echo ============== CLEANING SUCCESS
 goto :EOF
