@@ -59,7 +59,7 @@ DEL /S /Q flyway\flyway-maven-plugin || goto :error
 DEL /S /Q flyway\flyway-gradle-plugin || goto :error
 
 echo ============== COPYING OSSIFIED SOURCES
-robocopy flyway-release\flyway flyway /s /e
+robocopy flyway-release\flyway flyway /s /e /XD target
 IF %ERRORLEVEL% NEQ 3 goto :error
 
 echo ============== SHOW STATUS
