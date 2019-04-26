@@ -16,9 +16,9 @@ echo ============== CLEANING
 call clean.cmd || goto :error
 
 echo ============== CLONING MASTER (Git Branch: %FLYWAY_BRANCH%)
-git clone -b %FLYWAY_BRANCH% https://github.com/boxfuse/flyway-master.git || goto :error
+git clone -b %FLYWAY_BRANCH% https://github.com/flyway/flyway-master.git || goto :error
 echo ============== CLONING OSSIFIER
-git clone https://github.com/boxfuse/flyway-ossifier.git || goto :error
+git clone https://github.com/flyway/flyway-ossifier.git || goto :error
 
 echo ============== CLONE SUCCESS
 cd "%CURRENT_DIR%"
