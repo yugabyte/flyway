@@ -40,7 +40,7 @@ call clone.cmd %FLYWAY_BRANCH% || goto :error
 
 echo ============== BUILDING MASTER
 cd flyway-master
-call mvnw.cmd -Pbuild-assemblies install -DskipTests || goto :error
+call mvnw.cmd -X -e -Pbuild-assemblies install -DskipTests || goto :error
 cd ..
 
 echo ============== OSSIFYING
