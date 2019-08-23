@@ -24,21 +24,21 @@ echo ============== OSSIFY START
 
 echo ============== BUILDING OSSIFIER
 cd flyway-ossifier
-call mvnw.cmd clean package || goto :error
+call ../mvnw.cmd clean package || goto :error
 echo ============== RUNNING OSSIFIER
 java -jar target\flyway-ossifier-1.0-SNAPSHOT.jar "%CURRENT_DIR%" || goto :error
 
 echo ============== BUILDING PRO
 cd "%CURRENT_DIR%\flyway-pro"
-call mvnw.cmd -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call ../mvnw.cmd -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 
 echo ============== BUILDING ENTERPRISE
 cd "%CURRENT_DIR%\flyway-enterprise"
-call mvnw.cmd -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call ../mvnw.cmd -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 
 echo ============== BUILDING COMMUNITY
 cd "%CURRENT_DIR%\flyway"
-call mvnw.cmd -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call ../mvnw.cmd -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 
 echo ============== OSSIFY SUCCESS
 cd "%CURRENT_DIR%"
