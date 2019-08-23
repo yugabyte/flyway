@@ -40,7 +40,7 @@ call clone.cmd %FLYWAY_BRANCH% || goto :error
 
 echo ============== BUILDING MASTER
 cd flyway-master
-call mvn -Pbuild-assemblies install -DskipTests || goto :error
+call mvnw.cmd -Pbuild-assemblies install -DskipTests || goto :error
 cd ..
 
 echo ============== OSSIFYING
@@ -52,7 +52,7 @@ git clone -b %FLYWAY_BRANCH% https://github.com/flyway/flyway --depth=1 || goto 
 
 echo ============== DELETING EXISTING GH SOURCES
 DEL /Q flyway\*.* || goto :error
-DEL /S /Q flyway\.mvn || goto :error
+DEL /S /Q flyway\.mvnw.cmd || goto :error
 DEL /S /Q flyway\flyway-core || goto :error
 DEL /S /Q flyway\flyway-commandline || goto :error
 DEL /S /Q flyway\flyway-maven-plugin || goto :error
