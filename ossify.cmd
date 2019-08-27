@@ -26,7 +26,7 @@ echo ============== BUILDING OSSIFIER
 cd flyway-ossifier
 call ../mvnw.cmd clean package || goto :error
 echo ============== RUNNING OSSIFIER
-java -jar target\flyway-ossifier-1.0-SNAPSHOT.jar "%CURRENT_DIR%" || goto :error
+"%JAVA_HOME%\bin\java.exe" -jar target\flyway-ossifier-1.0-SNAPSHOT.jar "%CURRENT_DIR%" || goto :error
 
 echo ============== BUILDING PRO
 cd "%CURRENT_DIR%\flyway-pro"
