@@ -24,6 +24,18 @@ if [%1]==[] (
   set FLYWAY_BRANCH=%1
 )
 
+if [%2]==[] (
+  set FLYWAY_MASTER_REPO_URL=https://github.com/flyway/flyway-master.git
+) else (
+  set FLYWAY_MASTER_REPO_URL=%2
+)
+
+if [%3]==[] (
+  set FLYWAY_OSSIFIER_REPO_URL=https://github.com/flyway/flyway-ossifier.git
+) else (
+  set FLYWAY_OSSIFIER_REPO_URL=%3
+)
+
 SET CURRENT_DIR=%cd%
 
 echo ============== GH START (Git Branch: %FLYWAY_BRANCH%)
@@ -36,7 +48,7 @@ if exist flyway (
 cd "%CURRENT_DIR%"
 
 echo ============== CLONING
-call clone.cmd %FLYWAY_BRANCH% || goto :error
+call clone.cmd %FLYWAY_BRANCH% %FLYWAY_MASTER_REPO_URL% %FLYWAY_OSSIFIER_REPO_URL% || goto :error
 
 echo ============== BUILDING MASTER
 cd flyway-master
