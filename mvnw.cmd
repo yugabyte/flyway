@@ -120,9 +120,6 @@ SET MAVEN_JAVA_EXE="%JAVA_HOME%\bin\java.exe"
 set WRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain
 set WRAPPER_JAR="..\.mvn\wrapper\maven-wrapper.jar"
 
-
-echo working directory is %cd%
-
 set DOWNLOAD_URL="https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.5.5/maven-wrapper-0.5.5.jar"
 
 FOR /F "tokens=1,2 delims==" %%A IN ("%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.properties") DO (
