@@ -118,7 +118,10 @@ for /F "usebackq delims=" %%a in ("%MAVEN_PROJECTBASEDIR%\.mvn\jvm.config") do s
 
 SET MAVEN_JAVA_EXE="%JAVA_HOME%\bin\java.exe"
 set WRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain
-set WRAPPER_JAR="".\.mvn\wrapper\maven-wrapper.jar""
+set WRAPPER_JAR="..\.mvn\wrapper\maven-wrapper.jar"
+
+
+echo working directory is %cd%
 
 set DOWNLOAD_URL="https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.5.5/maven-wrapper-0.5.5.jar"
 
