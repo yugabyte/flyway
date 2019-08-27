@@ -47,6 +47,7 @@ echo ============== OSSIFYING
 call ossify.cmd || goto :error
 
 echo ============== CHECKING OUT CURRENT GH REPO (Git Branch: %FLYWAY_BRANCH%)
+SET FLYWAY_RELEASE_DIR=%cd%
 cd ..
 git clone -b %FLYWAY_BRANCH% https://github.com/flyway/flyway --depth=1 || goto :error
 
@@ -59,7 +60,7 @@ DEL /S /Q flyway\flyway-maven-plugin || goto :error
 DEL /S /Q flyway\flyway-gradle-plugin || goto :error
 
 echo ============== COPYING OSSIFIED SOURCES
-robocopy flyway-release\flyway flyway /s /e /XD target
+robocopy %FLYWAY_RELEASE_DIR%\flyway flyway /s /e /XD target
 IF %ERRORLEVEL% NEQ 3 goto :error
 
 echo ============== SHOW STATUS
