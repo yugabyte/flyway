@@ -51,8 +51,10 @@ echo ============== CLONING
 call clone.cmd %FLYWAY_BRANCH% %FLYWAY_MASTER_REPO_URL% %FLYWAY_OSSIFIER_REPO_URL% || goto :error
 
 echo ============== BUILDING MASTER
+SET SETTINGS_FILE_PATH=%cd%/team-city-settings.xml
+
 cd flyway-master
-call mvn -s ../team-city-settings.xml -Pbuild-assemblies install -DskipTests || goto :error
+call mvn -s %SETTINGS_FILE_PATH% -Pbuild-assemblies install -DskipTests || goto :error
 cd ..
 
 echo ============== OSSIFYING
