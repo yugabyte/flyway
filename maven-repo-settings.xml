@@ -1,6 +1,5 @@
 <settings>
     <servers>
-    <!-- From TeamCity environment variables -->
         <server>
             <id>${env.FLYWAY_REPO_ID}</id>
             <username>${env.FLYWAY_REPO_USERNAME}</username>
