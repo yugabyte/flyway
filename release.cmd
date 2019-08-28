@@ -18,7 +18,7 @@ call clone.cmd %FLYWAY_BRANCH% || goto :error
 
 echo ============== VERSIONING MASTER
 cd flyway-master
-call mvnw.cmd versions:set -DnewVersion=%1 || goto :error
+call mvn versions:set -DnewVersion=%1 || goto :error
 cd ..
 
 echo ============== OSSIFYING
@@ -26,7 +26,7 @@ call ossify.cmd || goto :error
 
 echo ============== BUILDING MASTER
 cd flyway-master
-call mvnw.cmd -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
+call mvn -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
 cd ..
 
 echo ============== DEPLOYING

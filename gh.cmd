@@ -52,7 +52,7 @@ call clone.cmd %FLYWAY_BRANCH% %FLYWAY_MASTER_REPO_URL% %FLYWAY_OSSIFIER_REPO_UR
 
 echo ============== BUILDING MASTER
 cd flyway-master
-call mvnw.cmd -s ../team-city-settings.xml -Pbuild-assemblies install -DskipTests || goto :error
+call mvn -s ../team-city-settings.xml -Pbuild-assemblies install -DskipTests || goto :error
 cd ..
 
 echo ============== OSSIFYING
