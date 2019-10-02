@@ -81,7 +81,10 @@ echo ============== SHOW STATUS
 cd flyway
 git status || goto :error
 git --no-pager diff || goto :error
-git diff --output=%FLYWAY_RELEASE_DIR%\changes.patch || goto :error
+
+echo =============== PRODUCE PATCH FILE
+git add .
+git diff --cached --output=%FLYWAY_RELEASE_DIR%\changes.patch || goto :error
 
 echo ============== GH SUCCESS
 cd "%CURRENT_DIR%"
