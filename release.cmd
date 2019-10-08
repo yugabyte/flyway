@@ -33,7 +33,7 @@ cd ..
 echo ============== DEPLOYING
 call deploy.cmd %1 %FLYWAY_BRANCH% || goto :error
 cd gradle-plugin-publishing
-call gradlew clean publishPlugins -Dversion=%1
+call gradlew clean publishPlugins -Dversion=%1 -Dgradle.publish.key=%FLYWAY_GRADLE_KEY% -Dgradle.publish.secret=%FLYWAY_GRADLE_SECRET%
 cd ..
 
 echo ============== RELEASE SUCCESS
