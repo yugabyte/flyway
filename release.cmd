@@ -10,6 +10,7 @@ if [%2]==[] (
 setlocal
 
 SET CURRENT_DIR=%cd%
+SET SETTINGS_FILE=%CURRENT_DIR%/settings.xml
 
 echo ============== RELEASE START (Version: %1, Git Branch: %FLYWAY_BRANCH%)
 
@@ -26,7 +27,7 @@ call ossify.cmd || goto :error
 
 echo ============== BUILDING MASTER
 cd flyway-master
-call mvn -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
+call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
 cd ..
 
 echo ============== DEPLOYING

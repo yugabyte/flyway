@@ -37,6 +37,7 @@ if [%3]==[] (
 )
 
 SET CURRENT_DIR=%cd%
+SET SETTINGS_FILE=%CURRENT_DIR%/settings.xml
 
 echo ============== GH START (Git Branch: %FLYWAY_BRANCH%)
 
@@ -51,10 +52,9 @@ echo ============== CLONING
 call clone.cmd %FLYWAY_BRANCH% %FLYWAY_MASTER_REPO_URL% %FLYWAY_OSSIFIER_REPO_URL% || goto :error
 
 echo ============== BUILDING MASTER
-SET SETTINGS_FILE_PATH=%cd%/settings.xml
 
 cd flyway-master
-call mvn -s %SETTINGS_FILE_PATH% -Pbuild-assemblies install -DskipTests || goto :error
+call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests || goto :error
 cd ..
 
 echo ============== OSSIFYING
