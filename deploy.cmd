@@ -7,10 +7,15 @@ if [%2]==[] (
   set FLYWAY_BRANCH=%2
 )
 
+if "%FLYWAY_REPO_URL%"=="" (
+  set FLYWAY_REPO_URL=https://github.com/flyway/flyway
+)
+
 setlocal
 
 SET CURRENT_DIR=%cd%
 SET SETTINGS_FILE=%CURRENT_DIR%/settings.xml
+
 
 echo ============== DEPLOY START
 
@@ -21,7 +26,7 @@ if exist flyway (
 )
 
 echo ============== CHECKING OUT CURRENT GH REPO (Git Branch: %FLYWAY_BRANCH%)
-git clone -b %FLYWAY_BRANCH% https://github.com/flyway/flyway || goto :error
+git clone -b %FLYWAY_BRANCH% %FLYWAY_REPO_URL% || goto :error
 cd flyway
 
 echo ============== VERSIONING COMMUNITY
