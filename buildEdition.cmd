@@ -1,8 +1,5 @@
 @echo off
 
-if [%1]==[] goto :nobranch
-set FLYWAY_BRANCH=%1
-
 setlocal
 
 SET CURRENT_DIR=%cd%
@@ -11,11 +8,6 @@ SET SETTINGS_FILE=%CURRENT_DIR%/settings.xml
 if "%FLYWAY_REPO_URL%"=="" (
   set FLYWAY_REPO_URL=https://github.com/flyway/flyway
 )
-
-echo ============== BUILD EDITION START (Git Branch: %FLYWAY_BRANCH%)
-
-echo ============== CLONING
-call clone.cmd %FLYWAY_BRANCH% || goto :error
 
 echo ============= BUILDING EDITIONS
 
@@ -70,8 +62,3 @@ echo ============== BUILD EDITION FAILED WITH ERROR %ERRORLVL%
 cd "%CURRENT_DIR%"
 pause
 exit /b %ERRORLVL%
-
-:nobranch
-echo ERROR: Missing branch!
-echo USAGE: buildEdtion.cmd feature-branch
-exit /b 1

@@ -45,8 +45,8 @@ cd flyway-master
 call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests || goto :error
 cd ..
 
-echo ============== OSSIFYING
-call ossify.cmd || goto :error
+echo ============== BUILDING EDITIONS
+call buildEdition.cmd || goto :error
 
 echo ============== CHECKING OUT CURRENT GH REPO (Git Branch: %FLYWAY_BRANCH%)
 SET FLYWAY_RELEASE_DIR=%cd%
