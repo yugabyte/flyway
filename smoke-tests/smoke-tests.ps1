@@ -61,7 +61,7 @@ try {
   $flywayCmd = "$unzipLocation\pro\$flywayCommunityRootDirectory\flyway.cmd";
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "info", "-pro");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "migrate", "-pro");
-  & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "validate");
+  & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "validate", "-pro");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "info", "-pro");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "undo", "-pro");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "info", "-pro");
@@ -73,13 +73,13 @@ try {
   $flywayCmd = "$unzipLocation\enterprise\$flywayEnterpriseRootDirectory\flyway.cmd";
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "info", "-enterprise");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "migrate", "-enterprise");
-  & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "validate");
+  & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "validate", "-enterprise");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "info", "-enterprise");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "undo", "-enterprise");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "info", "-enterprise");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "clean", "-enterprise");
 } catch {
-    $_;
+    throw;
 } finally {
   Remove-Item env:FLYWAY_LICENSE_KEY;
 }
