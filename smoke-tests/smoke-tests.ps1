@@ -78,6 +78,17 @@ try {
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "undo", "-enterprise");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "info", "-enterprise");
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "clean", "-enterprise");
+
+  Write-Output "Smoke testing Flyway Community JSON output"
+  $env:FLYWAY_LICENSE_KEY = "";
+  $flywayCmd = "$unzipLocation\community\$flywayProRootDirectory\flyway.cmd";
+  $infoJson = & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "-json.experimental", "info") | out-string
+  $parsedInfoJson = ConvertFrom-Json $infoJson;
+
+  if ($null -ne $parsedInfoJson.Error.message) {
+    throw 'Error detected in JSON output: ' + $infoJson;
+  }
+
 } catch {
     throw;
 } finally {
