@@ -83,10 +83,13 @@ try {
   $env:FLYWAY_LICENSE_KEY = "";
   $flywayCmd = "$unzipLocation\community\$flywayProRootDirectory\flyway.cmd";
   $infoJson = & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "-json.experimental", "info") | out-string
+
+  Write-Output $infoJson;
+
   $parsedInfoJson = ConvertFrom-Json $infoJson;
 
   if ($null -ne $parsedInfoJson.Error.message) {
-    throw 'Error detected in JSON output: ' + $infoJson;
+    throw 'Error detected in JSON output';
   }
 } catch {
     throw;
