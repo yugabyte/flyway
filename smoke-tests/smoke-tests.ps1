@@ -88,9 +88,6 @@ try {
   if ($null -ne $parsedInfoJson.Error.message) {
     throw 'Error detected in JSON output: ' + $infoJson;
   }
-
 } catch {
     throw;
-} finally {
-  Remove-Item env:FLYWAY_LICENSE_KEY;
 }
