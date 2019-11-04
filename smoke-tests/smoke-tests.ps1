@@ -20,7 +20,7 @@ switch ($Edition) {
 Write-Output "Looking for Flyway $Edition Zip";
 $flywayZip = (Get-ChildItem -Filter "$Edition\flyway-commandline-*-windows-x64.zip")[0].Name;
 
-$unzipLocation = (Get-Location).Path + "\unzip";
+$unzipLocation = Resolve-Path unzip;
 $unzipLocationExists = Test-Path $unzipLocation;
 
 if ($unzipLocationExists) {
@@ -35,8 +35,7 @@ Write-Output "Expanding $flywayZip to $unzipLocation\$Edition"
 Expand-Archive -LiteralPath "$Edition\$flywayZip" -DestinationPath "$unzipLocation\$Edition";
 
 Write-Output "Looking for Flyway root directory"
-$flywayRootDirectory = (Get-ChildItem "$unzipLocation\$Edition" -Filter "flyway-*")[0].Name;
-$flywayCmd = "$unzipLocation\$Edition\$flywayRootDirectory\flyway.cmd";
+$flywayCmd = Resolve-Path "$unzipLocation\$Edition\flyway-*\flyway.cmd";
 
 Write-Output "Beginning smoke tests"
 Write-Output "Smoke testing Flyway $Edition"
@@ -56,7 +55,7 @@ if ($Edition -ne "community" ) {
 Invoke-Flyway "clean";
 
 Write-Output "Smoke testing JSON output"
-$infoJson = & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "-json.experimental", "info") | out-string
+$infoJson = & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "-json.experimental", "info") | Out-String
 
 Write-Output $infoJson;
 
