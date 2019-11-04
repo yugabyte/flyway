@@ -30,7 +30,7 @@ Write-Output "Creating $unzipLocation"
 New-Item -ItemType directory -Path $unzipLocation
 
 Write-Output "Expanding $flywayZip to $unzipLocation\$Edition"
-Expand-Archive -LiteralPath "$Edition\$flywayZip" -DestinationPath "$unzipLocation\$Edition"
+Expand-Archive -LiteralPath "$flywayZip" -DestinationPath "$unzipLocation\$Edition"
 
 $flywayCmd = Resolve-Path "$unzipLocation\$Edition\flyway-*\flyway.cmd"
 
