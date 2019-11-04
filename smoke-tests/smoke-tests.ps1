@@ -34,15 +34,13 @@ New-Item -ItemType directory -Path $unzipLocation
 Write-Output "Expanding $flywayZip to $unzipLocation\$Edition"
 Expand-Archive -LiteralPath "$Edition\$flywayZip" -DestinationPath "$unzipLocation\$Edition"
 
-Write-Output "Looking for Flyway root directory"
 $flywayCmd = Resolve-Path "$unzipLocation\$Edition\flyway-*\flyway.cmd"
-
-Write-Output "Beginning smoke tests"
-Write-Output "Smoke testing Flyway $Edition"
 
 function Invoke-Flyway($command) {
   & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", $command, "-$Edition")
 }
+
+Write-Output "Smoke testing Flyway $Edition"
 
 Invoke-Flyway "info"
 Invoke-Flyway "migrate"
