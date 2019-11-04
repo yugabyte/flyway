@@ -21,9 +21,7 @@ Write-Output "Looking for Flyway $Edition Zip"
 $flywayZip = Resolve-Path "$Edition\flyway-commandline-*-windows-x64.zip"
 
 $unzipLocation = Resolve-Path "unzip"
-$unzipLocationExists = Test-Path $unzipLocation
-
-if ($unzipLocationExists) {
+if (Test-Path $unzipLocation) {
   Write-Output "Deleting $unzipLocation"
   Remove-Item -Path $unzipLocation -Recurse
 }
