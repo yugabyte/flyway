@@ -18,9 +18,9 @@ switch ($Edition) {
 }
 
 Write-Output "Looking for Flyway $Edition Zip"
-$flywayZip = (Get-ChildItem -Filter "$Edition\flyway-commandline-*-windows-x64.zip")[0].Name
+$flywayZip = Resolve-Path "$Edition\flyway-commandline-*-windows-x64.zip"
 
-$unzipLocation = Resolve-Path unzip
+$unzipLocation = Resolve-Path "unzip"
 $unzipLocationExists = Test-Path $unzipLocation
 
 if ($unzipLocationExists) {
