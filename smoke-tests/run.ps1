@@ -44,7 +44,7 @@ Invoke-Flyway "info"
 Invoke-Flyway "migrate"
 Invoke-Flyway "validate"
 Invoke-Flyway "info"
-if ($Edition -ne "community" ) {
+if ($Edition -ne "community") {
   Invoke-Flyway "undo"
   Invoke-Flyway "info"
 }
