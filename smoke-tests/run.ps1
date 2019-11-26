@@ -51,7 +51,7 @@ if ($Edition -ne "community") {
 Invoke-Flyway "clean"
 
 Write-Output "Smoke testing JSON output"
-$infoJson = & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "-json.experimental", "info") | Out-String
+$infoJson = & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", "-json", "info") | Out-String
 
 Write-Output $infoJson
 
