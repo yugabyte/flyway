@@ -31,8 +31,8 @@ Invoke-FlywayLatest migrate
 Invoke-FlywayLatest info
 
 Write-Output "Looking for Flyway $Edition Zip (built from current master)"
-$flywayZip = Resolve-Path "$Edition\flyway-commandline-*-windows-x64.zip"
-$unzipLocation = Join-Path (Resolve-Path .) "unzip"
+$flywayZip = Resolve-Path "$PSScriptRoot\..\$Edition\flyway-commandline-*-windows-x64.zip"
+$unzipLocation = Resolve-Path "$PSScriptRoot\..\unzip"
 
 if (Test-Path $unzipLocation) {
   Write-Output "Deleting $unzipLocation"
@@ -48,7 +48,7 @@ Expand-Archive -LiteralPath "$flywayZip" -DestinationPath "$unzipLocation\$Editi
 $flywayCmd = Resolve-Path "$unzipLocation\$Edition\flyway-*\flyway.cmd"
 
 function Invoke-Flyway($command) {
-  & $flywayCmd @("-configFiles=upgrade-tests\flyway.conf", $command, "-$Edition")
+  & $flywayCmd @("-configFiles=$PSScriptRoot\flyway.conf", $command, "-$Edition")
 }
 
 Write-Output "Upgrade testing Flyway $Edition"
