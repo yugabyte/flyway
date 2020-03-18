@@ -25,4 +25,26 @@
             <password>${env.FLYWAY_SONATYPE_NEXUS_PASSWORD}</password>
         </server>
     </servers>
+    <server>
+      <id>maven.oracle.com</id>
+      <username>mikiel.agutu@red-gate.com</username>
+      <password>Peruzzi1</password>
+      <configuration>
+        <basicAuthScope>
+          <host>ANY</host>
+          <port>ANY</port>
+          <realm>OAM 11g</realm>
+        </basicAuthScope>
+        <httpConfiguration>
+          <all>
+            <params>
+              <property>
+                <name>http.protocol.allow-circular-redirects</name>
+                <value>%b,true</value>
+              </property>
+            </params>
+          </all>
+        </httpConfiguration>
+      </configuration>
+    </server>
 </settings>
