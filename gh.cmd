@@ -42,7 +42,7 @@ call clone.cmd %FLYWAY_BRANCH% || goto :error
 echo ============== BUILDING MASTER
 
 cd flyway-master
-call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests || goto :error
+call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests -X || goto :error
 cd ..
 
 echo ============== BUILDING EDITIONS
