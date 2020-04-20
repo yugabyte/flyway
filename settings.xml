@@ -4,9 +4,9 @@
     <snapshotRepository.name>${env.SNAPSHOT_REPOSITORY_NAME}</snapshotRepository.name>
     <snapshotRepository.url>${env.SNAPSHOT_REPOSITORY_URL}</snapshotRepository.url>
 
-    <releaseRepository.id>${env.SNAPSHOT_REPOSITORY_ID}</releaseRepository.id>
-    <releaseRepository.name>${env.SNAPSHOT_REPOSITORY_NAME}</releaseRepository.name>
-    <releaseRepository.url>${env.SNAPSHOT_REPOSITORY_URL}</releaseRepository.url>
+    <releaseRepository.id>${env.RELEASE_REPOSITORY_ID}</releaseRepository.id>
+    <releaseRepository.name>${env.RELEASE_REPOSITORY_NAME}</releaseRepository.name>
+    <releaseRepository.url>${env.RELEASE_REPOSITORY_URL}</releaseRepository.url>
   </properties>
 
   <servers>
