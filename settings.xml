@@ -36,8 +36,25 @@
     </server>
     <server>
       <id>maven.oracle.com</id>
-      <username>oracle-reader</username>
-      <password>DistantCoughAmuser1</password>
+      <username>mikiel.agutu@red-gate.com</username>
+      <password>Peruzzi1</password>
+      <configuration>
+        <basicAuthScope>
+          <host>ANY</host>
+          <port>ANY</port>
+          <realm>OAM 11g</realm>
+        </basicAuthScope>
+        <httpConfiguration>
+          <all>
+            <params>
+              <property>
+                <name>http.protocol.allow-circular-redirects</name>
+                <value>%b,true</value>
+              </property>
+            </params>
+          </all>
+        </httpConfiguration>
+      </configuration>
     </server>
   </servers>
 </settings>
