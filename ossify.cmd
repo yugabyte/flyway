@@ -30,15 +30,15 @@ echo ============== RUNNING OSSIFIER
 
 echo ============== BUILDING PRO
 cd "%CURRENT_DIR%\flyway-pro"
-call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call mvn -Pbuild-assemblies clean install javadoc:jar -T3 -X || goto :error
 
 echo ============== BUILDING ENTERPRISE
 cd "%CURRENT_DIR%\flyway-enterprise"
-call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call mvn -Pbuild-assemblies clean install javadoc:jar -T3 -X || goto :error
 
 echo ============== BUILDING COMMUNITY
 cd "%CURRENT_DIR%\flyway"
-call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call mvn -Pbuild-assemblies clean install javadoc:jar -T3 -X || goto :error
 
 echo ============== OSSIFY SUCCESS
 cd "%CURRENT_DIR%"
