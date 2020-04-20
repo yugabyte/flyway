@@ -18,6 +18,8 @@
 
 setlocal
 
+if [%1]==[] goto :nosettings
+
 SET CURRENT_DIR=%cd%
 
 echo ============== OSSIFY START
@@ -30,18 +32,18 @@ echo ============== RUNNING OSSIFIER
 
 echo ============== BUILDING PRO
 cd "%CURRENT_DIR%\flyway-pro"
-call mvn dependency:purge-local-repository || goto :error
-call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call mvn -s %1 dependency:purge-local-repository || goto :error
+call mvn -s %1 -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 
 echo ============== BUILDING ENTERPRISE
 cd "%CURRENT_DIR%\flyway-enterprise"
-call mvn dependency:purge-local-repository || goto :error
-call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call mvn -s %1 dependency:purge-local-repository || goto :error
+call mvn -s %1 -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 
 echo ============== BUILDING COMMUNITY
 cd "%CURRENT_DIR%\flyway"
-call mvn dependency:purge-local-repository || goto :error
-call mvn -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call mvn -s %1 dependency:purge-local-repository || goto :error
+call mvn -s %1 -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
 
 echo ============== OSSIFY SUCCESS
 cd "%CURRENT_DIR%"
@@ -53,3 +55,8 @@ echo ============== OSSIFY FAILED WITH ERROR %ERRORLVL%
 cd "%CURRENT_DIR%"
 pause
 exit /b %ERRORLVL%
+
+:nosettings
+echo ERROR: Missing settings file!
+echo USAGE: ossify.cmd path/to/settings.xml
+exit /b 1
