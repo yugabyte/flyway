@@ -1,15 +1,27 @@
 <settings>
  <profiles>
     <profile>
-      <id>release-profile</id>
+      <id>sonatype-release</id>
       <properties>
-        <snapshotRepository.id>${env.SNAPSHOT_REPOSITORY_ID}</snapshotRepository.id>
-        <snapshotRepository.name>${env.SNAPSHOT_REPOSITORY_NAME}</snapshotRepository.name>
-        <snapshotRepository.url>${env.SNAPSHOT_REPOSITORY_URL}</snapshotRepository.url>
+        <snapshotRepository.id>sonatype-nexus-snapshots</snapshotRepository.id>
+        <snapshotRepository.name>Sonatype Nexus Snapshots</snapshotRepository.name>
+        <snapshotRepository.url>https://oss.sonatype.org/content/repositories/snapshots</snapshotRepository.url>
 
-        <releaseRepository.id>${env.RELEASE_REPOSITORY_ID}</releaseRepository.id>
-        <releaseRepository.name>${env.RELEASE_REPOSITORY_NAME}</releaseRepository.name>
-        <releaseRepository.url>${env.RELEASE_REPOSITORY_URL}</releaseRepository.url>
+        <releaseRepository.id>sonatype-nexus-staging</releaseRepository.id>
+        <releaseRepository.name>Nexus Release Repository</releaseRepository.name>
+        <releaseRepository.url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</releaseRepository.url>
+      </properties>
+    </profile>
+    <profile>
+      <id>repo-proxy-release</id>
+      <properties>
+        <snapshotRepository.id></snapshotRepository.id> <!-- Intentionally blank -->
+        <snapshotRepository.name></snapshotRepository.name> <!-- Intentionally blank -->
+        <snapshotRepository.url></snapshotRepository.url> <!-- Intentionally blank -->
+
+        <releaseRepository.id>flyway-repo-release</releaseRepository.id>
+        <releaseRepository.name></releaseRepository.name> <!-- Intentionally blank -->
+        <releaseRepository.url>https://repo.flywaydb.org/repo</releaseRepository.url>
       </properties>
     </profile>
   </profiles>
@@ -66,7 +78,4 @@
       <password>DistantCoughAmuser1</password>
     </server>
   </servers>
-  <activeProfiles>
-    <activeProfile>release-profile</activeProfile>
-  </activeProfiles>
 </settings>
