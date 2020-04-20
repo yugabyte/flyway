@@ -27,7 +27,7 @@ call ossify.cmd %SETTINGS_FILE% || goto :error
 
 echo ============== BUILDING MASTER
 cd flyway-master
-call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
+call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies -Prepo-proxy-release deploy scm:tag -DperformRelease=true -DskipTests || goto :error
 cd ..
 
 echo ============== DEPLOYING

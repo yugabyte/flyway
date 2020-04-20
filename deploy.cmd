@@ -32,7 +32,7 @@ cd flyway
 echo ============== VERSIONING COMMUNITY
 call mvn versions:set -DnewVersion=%1 || goto :error
 echo ============== DEPLOYING COMMUNITY
-call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
+call mvn -s "%SETTINGS_FILE%" -Psonatype-release -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
 cd "%CURRENT_DIR%"
 
 echo ============== DEPLOYING PRO
