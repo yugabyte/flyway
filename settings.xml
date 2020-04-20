@@ -56,5 +56,10 @@
         </httpConfiguration>
       </configuration>
     </server>
+    <server>
+      <id>redgate.maven.oracle.com</id>
+      <username>oracle-reader</username>
+      <password>DistantCoughAmuser1</password>
+    </server>
   </servers>
 </settings>
