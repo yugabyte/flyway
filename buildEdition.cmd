@@ -11,7 +11,7 @@ if "%FLYWAY_REPO_URL%"=="" (
 
 echo ============= BUILDING EDITIONS
 
-call ossify.cmd || goto :error
+call ossify.cmd %SETTINGS_FILE% || goto :error
 
 echo ============== CREATING OUTPUT DIRECTORY STRUCTURE
 

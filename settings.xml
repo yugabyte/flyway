@@ -1,14 +1,30 @@
 <settings>
-  <properties>
-    <snapshotRepository.id>${env.SNAPSHOT_REPOSITORY_ID}</snapshotRepository.id>
-    <snapshotRepository.name>${env.SNAPSHOT_REPOSITORY_NAME}</snapshotRepository.name>
-    <snapshotRepository.url>${env.SNAPSHOT_REPOSITORY_URL}</snapshotRepository.url>
+ <profiles>
+    <profile>
+      <id>sonatype-release</id>
+      <properties>
+        <snapshotRepository.id>sonatype-nexus-snapshots</snapshotRepository.id>
+        <snapshotRepository.name>Sonatype Nexus Snapshots</snapshotRepository.name>
+        <snapshotRepository.url>https://oss.sonatype.org/content/repositories/snapshots</snapshotRepository.url>
 
-    <releaseRepository.id>${env.SNAPSHOT_REPOSITORY_ID}</releaseRepository.id>
-    <releaseRepository.name>${env.SNAPSHOT_REPOSITORY_NAME}</releaseRepository.name>
-    <releaseRepository.url>${env.SNAPSHOT_REPOSITORY_URL}</releaseRepository.url>
-  </properties>
+        <releaseRepository.id>sonatype-nexus-staging</releaseRepository.id>
+        <releaseRepository.name>Nexus Release Repository</releaseRepository.name>
+        <releaseRepository.url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</releaseRepository.url>
+      </properties>
+    </profile>
+    <profile>
+      <id>repo-proxy-release</id>
+      <properties>
+        <snapshotRepository.id></snapshotRepository.id> <!-- Intentionally blank -->
+        <snapshotRepository.name></snapshotRepository.name> <!-- Intentionally blank -->
+        <snapshotRepository.url></snapshotRepository.url> <!-- Intentionally blank -->
 
+        <releaseRepository.id>flyway-repo-release</releaseRepository.id>
+        <releaseRepository.name></releaseRepository.name> <!-- Intentionally blank -->
+        <releaseRepository.url>https://repo.flywaydb.org/repo</releaseRepository.url>
+      </properties>
+    </profile>
+  </profiles>
   <servers>
     <server>
       <id>flyway-repo</id>
@@ -55,6 +71,11 @@
           </all>
         </httpConfiguration>
       </configuration>
+    </server>
+    <server>
+      <id>redgate.maven.oracle.com</id>
+      <username>oracle-reader</username>
+      <password>DistantCoughAmuser1</password>
     </server>
   </servers>
 </settings>
