@@ -47,7 +47,7 @@ pluginBundle {
 
   plugins {
     flywayPlugin {
-      id = 'org.flywaydb.pro.flyway'
+      id = 'org.flywaydb.flyway'
       displayName = 'Flyway Pro Gradle plugin'
     }
   }
