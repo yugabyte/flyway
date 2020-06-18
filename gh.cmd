@@ -39,9 +39,9 @@ cd "%CURRENT_DIR%"
 echo ============== CLONING
 call clone.cmd %FLYWAY_BRANCH% || goto :error
 
-echo ============== BUILDING MASTER
+echo ============== BUILDING MAIN
 
-cd flyway-master
+cd flyway-main
 call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests || goto :error
 cd ..
 

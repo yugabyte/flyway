@@ -1,8 +1,8 @@
 @echo off
 
-echo ============== CLEANING MASTER
-if exist flyway-master (
-  rmdir /s/q flyway-master || goto :error
+echo ============== CLEANING MAIN
+if exist flyway-main (
+  rmdir /s/q flyway-main || goto :error
 )
 echo ============== CLEANING OSSIFIER
 if exist flyway-ossifier (

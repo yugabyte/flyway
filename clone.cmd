@@ -6,12 +6,12 @@ if [%1]==[] (
   set FLYWAY_BRANCH=%1
 )
 
-if "%FLYWAY_MASTER_REPO_URL%"=="" (
-  set FLYWAY_MASTER_REPO_URL=https://github.com/flyway/flyway-master.git
+if "%FLYWAY_MAIN_REPO_URL%"=="" (
+  set FLYWAY_MAIN_REPO_URL=https://github.com/red-gate/flyway-main.git
 )
 
 if "%FLYWAY_OSSIFIER_REPO_URL%"=="" (
-  set FLYWAY_OSSIFIER_REPO_URL=https://github.com/flyway/flyway-ossifier.git
+  set FLYWAY_OSSIFIER_REPO_URL=https://github.com/red-gate/flyway-ossifier.git
 )
 
 setlocal
@@ -23,8 +23,8 @@ echo ============== CLONE START
 echo ============== CLEANING
 call clean.cmd || goto :error
 
-echo ============== CLONING MASTER (Git Branch: %FLYWAY_BRANCH%)
-git clone -b %FLYWAY_BRANCH% %FLYWAY_MASTER_REPO_URL% || goto :error
+echo ============== CLONING MAIN (Git Branch: %FLYWAY_BRANCH%)
+git clone -b %FLYWAY_BRANCH% %FLYWAY_MAIN_REPO_URL% || goto :error
 echo ============== CLONING OSSIFIER
 git clone %FLYWAY_OSSIFIER_REPO_URL% || goto :error
 

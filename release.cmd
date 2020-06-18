@@ -17,16 +17,16 @@ echo ============== RELEASE START (Version: %1, Git Branch: %FLYWAY_BRANCH%)
 echo ============== CLONING
 call clone.cmd %FLYWAY_BRANCH% || goto :error
 
-echo ============== VERSIONING MASTER
-cd flyway-master
+echo ============== VERSIONING MAIN
+cd flyway-main
 call mvn versions:set -DnewVersion=%1 || goto :error
 cd ..
 
 echo ============== OSSIFYING
 call ossify.cmd %SETTINGS_FILE% || goto :error
 
-echo ============== BUILDING MASTER
-cd flyway-master
+echo ============== BUILDING MAIN
+cd flyway-main
 call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies -Prepo-proxy-release deploy scm:tag -DperformRelease=true -DskipTests || goto :error
 cd ..
 
