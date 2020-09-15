@@ -12,10 +12,6 @@ echo ============== CLEANING COMMUNITY
 if exist flyway (
   rmdir /s/q flyway || goto :error
 )
-echo ============== CLEANING PRO
-if exist flyway-pro (
-  rmdir /s/q flyway-pro || goto :error
-)
 echo ============== CLEANING ENTERPRISE
 if exist flyway-enterprise (
   rmdir /s/q flyway-enterprise || goto :error

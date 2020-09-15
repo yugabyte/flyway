@@ -68,5 +68,5 @@ exit /b %ERRORLVL%
 
 :usage
 echo ERROR: Missing version or edition!
-echo USAGE: deployEdition.cmd 1.2.3 pro
+echo USAGE: deployEdition.cmd 1.2.3 enterprise
 exit /b 1
