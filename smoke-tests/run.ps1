@@ -55,7 +55,7 @@ Expand-Archive -LiteralPath "$flywayZip" -DestinationPath "$unzipLocation\$Editi
 $flywayCmd = Resolve-Path "$unzipLocation\$Edition\flyway-*\flyway.cmd"
 
 function Invoke-Flyway($command) {
-  Write-Output "flyway.placeholders.secretValue=1" | & $flywayCmd @("-configFiles=smoke-tests\flyway.conf", $command, "-$Edition")
+  Write-Output "flyway.placeholders.secretValue=1" | & $flywayCmd @("-configFiles=smoke-tests\flyway.conf,-", $command, "-$Edition")
 }
 
 Write-Output "Smoke testing Flyway $Edition"
