@@ -30,11 +30,6 @@ call mvn clean package || goto :error
 echo ============== RUNNING OSSIFIER
 "%JAVA_HOME%\bin\java.exe" -jar target\flyway-ossifier-1.0-SNAPSHOT.jar "%CURRENT_DIR%" || goto :error
 
-echo ============== BUILDING PRO
-cd "%CURRENT_DIR%\flyway-pro"
-call mvn -s %1 -U dependency:purge-local-repository clean install || goto :error
-call mvn -s %1 -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
-
 echo ============== BUILDING ENTERPRISE
 cd "%CURRENT_DIR%\flyway-enterprise"
 call mvn -s %1 -U dependency:purge-local-repository clean install || goto :error

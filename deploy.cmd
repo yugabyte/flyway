@@ -35,9 +35,6 @@ echo ============== DEPLOYING COMMUNITY
 call mvn -s "%SETTINGS_FILE%" -Psonatype-release -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests || goto :error
 cd "%CURRENT_DIR%"
 
-echo ============== DEPLOYING PRO
-call deployEdition.cmd %1 pro || goto :error
-
 echo ============== DEPLOYING ENTERPRISE
 call deployEdition.cmd %1 enterprise || goto :error
 
