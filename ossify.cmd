@@ -24,11 +24,12 @@ SET CURRENT_DIR=%cd%
 
 echo ============== OSSIFY START
 
-echo ============== BUILDING OSSIFIER
-cd flyway-ossifier
-call mvn clean package || goto :error
+cd flyway-main/master-only/flyway-ossifier
+
 echo ============== RUNNING OSSIFIER
-"%JAVA_HOME%\bin\java.exe" -jar target\flyway-ossifier-1.0-SNAPSHOT.jar "%CURRENT_DIR%" || goto :error
+call mvn clean compile exec:java -Dexec.mainClass="com.boxfuse.flyway.ossifier.OSSifier" -Dexec.args="%CURRENT_DIR% %CURRENT_DIR%/flyway-main" || goto :error
+
+cd ../../
 
 echo ============== BUILDING ENTERPRISE
 cd "%CURRENT_DIR%\flyway-enterprise"
