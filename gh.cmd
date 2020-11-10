@@ -18,10 +18,16 @@
 
 setlocal
 
+@REM Either both or neither of these arguments must be suppplied.
 if [%1]==[] (
   set FLYWAY_BRANCH=master
 ) else (
   set FLYWAY_BRANCH=%1
+)
+if [%2]==[] (
+  set TEST_MODE=false
+) else (
+  set TEST_MODE=%2
 )
 
 SET CURRENT_DIR=%cd%
@@ -46,7 +52,7 @@ call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests || goto :er
 cd ..
 
 echo ============== BUILDING EDITIONS
-call buildEdition.cmd || goto :error
+call buildEdition.cmd %TEST_MODE% || goto :error
 
 echo ============== CHECKING OUT CURRENT GH REPO (Git Branch: %FLYWAY_BRANCH%)
 SET FLYWAY_RELEASE_DIR=%cd%
