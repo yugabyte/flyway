@@ -1,9 +1,9 @@
 @echo off
 
 if [%1]==[] (
-  set TEST_MODE=false
+  set OSSIFY_TEST_MODE=false
 ) else (
-  set TEST_MODE=%1
+  set OSSIFY_TEST_MODE=%1
 )
 
 setlocal
@@ -17,7 +17,7 @@ if "%FLYWAY_REPO_URL%"=="" (
 
 echo ============= BUILDING EDITIONS
 
-call ossify.cmd %SETTINGS_FILE% %TEST_MODE% || goto :error
+call ossify.cmd %SETTINGS_FILE% %OSSIFY_TEST_MODE% || goto :error
 
 echo ============== CREATING OUTPUT DIRECTORY STRUCTURE
 

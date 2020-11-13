@@ -21,9 +21,9 @@ setlocal
 if [%1]==[] goto :nosettings
 
 if [%2]==[] (
-  set TEST_MODE=false
+  set OSSIFY_TEST_MODE=false
 ) else (
-  set TEST_MODE=%2
+  set OSSIFY_TEST_MODE=%2
 )
 
 SET CURRENT_DIR=%cd%
@@ -33,7 +33,7 @@ echo ============== OSSIFY START
 cd flyway-main/master-only/flyway-ossifier
 
 echo ============== RUNNING OSSIFIER
-@REM Ossifier reads the TEST_MODE environment variable
+@REM Ossifier reads the OSSIFY_TEST_MODE environment variable
 call mvn clean compile exec:java -Dexec.mainClass="com.boxfuse.flyway.ossifier.OSSifier" -Dexec.args="%CURRENT_DIR% %CURRENT_DIR%/flyway-main" || goto :error
 
 cd ../../
