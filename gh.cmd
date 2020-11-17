@@ -48,7 +48,7 @@ call clone.cmd %FLYWAY_BRANCH% || goto :error
 echo ============== BUILDING MAIN
 
 cd flyway-main
-call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests || goto :error
+call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests -DskipITs || goto :error
 cd ..
 
 echo ============== BUILDING EDITIONS

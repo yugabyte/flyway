@@ -34,19 +34,19 @@ cd flyway-main/master-only/flyway-ossifier
 
 echo ============== RUNNING OSSIFIER
 @REM Ossifier reads the OSSIFY_TEST_MODE environment variable
-call mvn clean compile exec:java -Dexec.mainClass="com.boxfuse.flyway.ossifier.OSSifier" -Dexec.args="%CURRENT_DIR% %CURRENT_DIR%/flyway-main" || goto :error
+call mvn clean compile exec:java -Dexec.mainClass="com.boxfuse.flyway.ossifier.OSSifier" -Dexec.args="%CURRENT_DIR% %CURRENT_DIR%/flyway-main" -DskipTests -DskipITs || goto :error
 
 cd ../../
 
 echo ============== BUILDING ENTERPRISE
 cd "%CURRENT_DIR%\flyway-enterprise"
-call mvn -s %1 -U dependency:purge-local-repository clean install || goto :error
-call mvn -s %1 -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call mvn -s %1 -U dependency:purge-local-repository clean install -DskipTests -DskipITs || goto :error
+call mvn -s %1 -Pbuild-assemblies clean install javadoc:jar -T3 -DskipTests -DskipITs || goto :error
 
 echo ============== BUILDING COMMUNITY
 cd "%CURRENT_DIR%\flyway"
-call mvn -s %1 -U dependency:purge-local-repository clean install || goto :error
-call mvn -s %1 -Pbuild-assemblies clean install javadoc:jar -T3 || goto :error
+call mvn -s %1 -U dependency:purge-local-repository clean install -DskipTests -DskipITs || goto :error
+call mvn -s %1 -Pbuild-assemblies clean install javadoc:jar -T3 -DskipTests -DskipITs || goto :error
 
 echo ============== OSSIFY SUCCESS
 cd "%CURRENT_DIR%"
