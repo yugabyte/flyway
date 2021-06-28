@@ -20,6 +20,9 @@ call clone.cmd %FLYWAY_BRANCH% || goto :error
 echo ============== VERSIONING MAIN
 cd flyway-main
 call mvn versions:set -DnewVersion=%1 || goto :error
+if NOT [%3]==[] (
+call mvn versions:set-property -Dqualifier=-BETA -pl %3
+)
 cd ..
 
 echo ============== OSSIFYING
@@ -31,11 +34,11 @@ call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies -Prepo-proxy-release deploy scm
 cd ..
 
 echo ============== DEPLOYING
-call deploy.cmd %1 %FLYWAY_BRANCH% || goto :error
-cd gradle-plugin-publishing
-call gradlew -b release-community.gradle clean publishPlugins -Dversion=%1 -Dgradle.publish.key=%FLYWAY_GRADLE_KEY% -Dgradle.publish.secret=%FLYWAY_GRADLE_SECRET% || goto :error
-call gradlew -b release-enterprise.gradle clean publishPlugins -Dversion=%1 -Dgradle.publish.key=%FLYWAY_GRADLE_KEY% -Dgradle.publish.secret=%FLYWAY_GRADLE_SECRET% || goto :error
-cd ..
+@REM call deploy.cmd %1 %FLYWAY_BRANCH% || goto :error
+@REM cd gradle-plugin-publishing
+@REM call gradlew -b release-community.gradle clean publishPlugins -Dversion=%1 -Dgradle.publish.key=%FLYWAY_GRADLE_KEY% -Dgradle.publish.secret=%FLYWAY_GRADLE_SECRET% || goto :error
+@REM call gradlew -b release-enterprise.gradle clean publishPlugins -Dversion=%1 -Dgradle.publish.key=%FLYWAY_GRADLE_KEY% -Dgradle.publish.secret=%FLYWAY_GRADLE_SECRET% || goto :error
+@REM cd ..
 
 echo ============== RELEASE SUCCESS
 cd "%CURRENT_DIR%"

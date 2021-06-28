@@ -5,6 +5,8 @@ if [%2]==[] goto :usage
 
 setlocal
 
+SET QUALIFIER=""
+
 SET CURRENT_DIR=%cd%
 SET SETTINGS_FILE=%CURRENT_DIR%/settings.xml
 
@@ -25,8 +27,6 @@ echo ============== DEPLOYING %2 PARENT TO %RELEASE_REPOSITORY_URL%
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=pom.xml -DgroupId=%GROUP_ID% -DartifactId=flyway-parent -Dversion=%VERSION% -Dpackaging=pom -DupdateReleaseInfo=true -Dsources=%FAKE_SOURCES% || goto :error
 echo ============== DEPLOYING %2 CORE TO %RELEASE_REPOSITORY_URL%
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-core/target/flyway-core-%VERSION%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-core -Dversion=%VERSION% -Dpackaging=jar -Djavadoc=flyway-core/target/flyway-core-%VERSION%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-core/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
-echo ============== DEPLOYING %2 GCP BETA SUPPORT TO %RELEASE_REPOSITORY_URL%
-call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-gcp-beta-support/target/flyway-gcp-beta-support-%VERSION%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-gcp-beta-support -Dversion=%VERSION% -Dpackaging=jar -Djavadoc=flyway-gcp-beta-support/target/flyway-gcp-beta-support-%VERSION%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-gcp-beta-support/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
 echo ============== DEPLOYING %2 GRADLE PLUGIN TO %RELEASE_REPOSITORY_URL%
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-gradle-plugin/target/flyway-gradle-plugin-%VERSION%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-gradle-plugin -Dversion=%VERSION% -Dpackaging=jar -Djavadoc=flyway-gradle-plugin/target/flyway-gradle-plugin-%VERSION%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-gradle-plugin/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
 echo ============== DEPLOYING %2 MAVEN PLUGIN TO %RELEASE_REPOSITORY_URL%
@@ -36,6 +36,17 @@ call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -D
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-commandline/target/flyway-commandline-%VERSION%-windows-x64.zip -DgroupId=%GROUP_ID% -DartifactId=flyway-commandline -Dversion=%VERSION% -Dpackaging=zip -DgeneratePom=false -Dclassifier=windows-x64 -DperformRelease=true -Dsources=%FAKE_SOURCES% || goto :error
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-commandline/target/flyway-commandline-%VERSION%-linux-x64.tar.gz -DgroupId=%GROUP_ID% -DartifactId=flyway-commandline -Dversion=%VERSION% -Dpackaging=tar.gz -DgeneratePom=false -Dclassifier=linux-x64 -DperformRelease=true -Dsources=%FAKE_SOURCES% || goto :error
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-commandline/target/flyway-commandline-%VERSION%-macosx-x64.tar.gz -DgroupId=%GROUP_ID% -DartifactId=flyway-commandline -Dversion=%VERSION% -Dpackaging=tar.gz -DgeneratePom=false -Dclassifier=macosx-x64 -DperformRelease=true -Dsources=%FAKE_SOURCES% || goto :error
+
+echo ============== DEPLOYING %2 GCP BigQuery SUPPORT TO %RELEASE_REPOSITORY_URL%
+if exists flyway-gcp-bigquery/target/flyway-gcp-bigquery-%VERSION%-BETA.jar (
+%QUALIFIER%=-BETA
+)
+call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-gcp-bigquery/target/flyway-gcp-bigquery-%VERSION%%QUALIFIER%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-gcp-bigquery -Dversion=%VERSION%%QUALIFIER% -Dpackaging=jar -Djavadoc=flyway-gcp-bigquery/target/flyway-gcp-bigquery-%VERSION%%QUALIFIER%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-gcp-bigquery/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
+echo ============== DEPLOYING %2 GCP Spanner SUPPORT TO %RELEASE_REPOSITORY_URL%
+if exists flyway-gcp-spanner/target/flyway-gcp-spanner-%VERSION%-BETA.jar (
+%QUALIFIER%=-BETA
+)
+call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-gcp-spanner/target/flyway-gcp-spanner-%VERSION%%QUALIFIER%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-gcp-spanner -Dversion=%VERSION%%QUALIFIER% -Dpackaging=jar -Djavadoc=flyway-gcp-spanner/target/flyway-gcp-spanner-%VERSION%%QUALIFIER%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-gcp-spanner/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
 
 
 echo ============== DEPLOY %2 SUCCESS
