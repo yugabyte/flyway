@@ -30,7 +30,7 @@ SET QUALIFIER=""
 echo ============== RELEASE START (Version: %VERSION%, Git Branch: %FLYWAY_BRANCH%)
 
 echo ============== CLONING
-git clone -b %FLYWAY_BRANCH% https://github.com/red-gate/flyway-main.git || goto :error
+git clone -b %FLYWAY_BRANCH% %FLYWAY_MAIN_REPO_URL% || goto :error
 
 echo ============== VERSIONING MAIN
 cd %FLYWAY_RELEASE_DIR%\flyway-main

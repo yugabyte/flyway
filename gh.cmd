@@ -36,7 +36,7 @@ SET SETTINGS_FILE=%FLYWAY_RELEASE_DIR%/settings.xml
 echo ============== GH START (Git Branch: %FLYWAY_BRANCH%)
 
 echo ============== CLONING
-git clone -b %FLYWAY_BRANCH% https://github.com/red-gate/flyway-main.git || goto :error
+git clone -b %FLYWAY_BRANCH% %FLYWAY_MAIN_REPO_URL% || goto :error
 
 echo ============== BUILDING MAIN
 cd %FLYWAY_RELEASE_DIR%\flyway-main
