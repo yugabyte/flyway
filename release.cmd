@@ -20,7 +20,7 @@ setlocal
 SET FLYWAY_RELEASE_DIR=%cd%
 SET SETTINGS_FILE=%FLYWAY_RELEASE_DIR%/settings.xml
 set OSSIFY_TEST_MODE=false
-set GROUP_ID=org.flywaydb.entiprise
+set GROUP_ID=org.flywaydb.enterprise
 SET RELEASE_REPOSITORY_URL=https://oss.sonatype.org/service/local/staging/deploy/maven2/
 SET RELEASE_REPOSITORY_ID=sonatype-nexus-staging
 SET PROFILE=sonatype-release
