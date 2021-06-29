@@ -9,12 +9,6 @@ if [%2]==[] (
   set FLYWAY_BRANCH=%2
 )
 
-if [%3]==[] (
-  set FLYWAY_BETA=""
-) else (
-  set FLYWAY_BETA=%3
-)
-
 setlocal
 
 SET FLYWAY_RELEASE_DIR=%cd%
@@ -25,7 +19,6 @@ SET RELEASE_REPOSITORY_URL=https://oss.sonatype.org/service/local/staging/deploy
 SET RELEASE_REPOSITORY_ID=sonatype-nexus-staging
 SET PROFILE=sonatype-release
 SET FAKE_SOURCES=%FLYWAY_RELEASE_DIR%/fake-sources/flyway-sources.jar
-SET QUALIFIER=""
 
 echo ============== RELEASE START (Version: %VERSION%, Git Branch: %FLYWAY_BRANCH%)
 
@@ -35,23 +28,26 @@ git clone -b %FLYWAY_BRANCH% %FLYWAY_MAIN_REPO_URL% || goto :error
 echo ============== VERSIONING MAIN
 cd %FLYWAY_RELEASE_DIR%\flyway-main
 call mvn versions:set -DnewVersion=%VERSION% || goto :error
-if NOT [%FLYWAY_BETA%]==[] (
-  call mvn versions:set -DnewVersion=%VERSION%-BETA -pl %FLYWAY_BETA% || goto :error
-)
 
 echo ============== RUNNING OSSIFIER
 cd %FLYWAY_RELEASE_DIR%\flyway-main\master-only\flyway-ossifier
 @REM OSSifier reads the OSSIFY_TEST_MODE environment variable
 call mvn clean compile exec:java -Dexec.mainClass="com.boxfuse.flyway.ossifier.OSSifier" -Dexec.args="%FLYWAY_RELEASE_DIR% %FLYWAY_RELEASE_DIR%/flyway-main" -DskipTests -DskipITs || goto :error
 
-echo ============== BUILDING ENTERPRISE
+echo ============== PURGE ENTERPRISE
 cd %FLYWAY_RELEASE_DIR%\flyway-enterprise
 call mvn -s %SETTINGS_FILE% -U dependency:purge-local-repository clean install -DskipTests -DskipITs || goto :error
+
+echo ============== PURGE COMMUNITY
+cd %FLYWAY_RELEASE_DIR%\flyway
+call mvn -s %SETTINGS_FILE% -U dependency:purge-local-repository clean install -DskipTests -DskipITs || goto :error
+
+echo ============== BUILDING ENTERPRISE
+cd %FLYWAY_RELEASE_DIR%\flyway-enterprise
 call mvn -s %SETTINGS_FILE% -Pbuild-assemblies clean install javadoc:jar -T3 -DskipTests -DskipITs || goto :error
 
 echo ============== BUILDING COMMUNITY
 cd %FLYWAY_RELEASE_DIR%\flyway
-call mvn -s %SETTINGS_FILE% -U dependency:purge-local-repository clean install -DskipTests -DskipITs || goto :error
 call mvn -s %SETTINGS_FILE% -Pbuild-assemblies clean install javadoc:jar -T3 -DskipTests -DskipITs || goto :error
 
 echo ============== BUILDING MAIN
@@ -59,7 +55,7 @@ cd %FLYWAY_RELEASE_DIR%\flyway-main
 call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies -Prepo-proxy-release deploy scm:tag -DperformRelease=true -DskipTests -DskipITs || goto :error
 
 echo ============== DEPLOYING
-SET PACKAGES="flyway-core,flyway-gradle-plugin,flyway-maven-plugin,flyway-commandline,flyway-community-db-support,flyway-gcp-bigquery,flyway-gcp-spanner"
+SET PACKAGES=flyway-core,flyway-gradle-plugin,flyway-maven-plugin,flyway-commandline,flyway-community-db-support,flyway-gcp-bigquery,flyway-gcp-spanner
 
 echo ============== DEPLOYING COMMUNITY
 cd %FLYWAY_RELEASE_DIR%\flyway
@@ -67,14 +63,27 @@ call mvn -s "%SETTINGS_FILE%" -Psonatype-release -Pbuild-assemblies deploy scm:t
 
 echo ============== DEPLOYING ENTERPRISE TO %RELEASE_REPOSITORY_URL%
 cd %FLYWAY_RELEASE_DIR%\flyway-enterprise
+
+echo ============== DEPLOYING %2 PARENT TO %RELEASE_REPOSITORY_URL%
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=pom.xml -DgroupId=%GROUP_ID% -DartifactId=flyway-parent -Dversion=%VERSION% -Dpackaging=pom -DupdateReleaseInfo=true -Dsources=%FAKE_SOURCES% || goto :error
-for /F "tokens=1* delims=," %%f in ("%PACKAGES%") do (
-  if exists %%f/target/%%f-%VERSION%-BETA.jar (
-    %QUALIFIER%=-BETA
-  )
-  call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=%%f/target/%%f-%VERSION%%QUALIFIER%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-core -Dversion=%VERSION%%QUALIFIER% -Dpackaging=jar -Djavadoc=%%f/target/%%f-%VERSION%%QUALIFIER%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=%%f/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
-  %QUALIFIER%=""
-)
+
+echo ============== DEPLOYING %2 CORE TO %RELEASE_REPOSITORY_URL%
+call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-core/target/flyway-core-%VERSION%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-core -Dversion=%VERSION% -Dpackaging=jar -Djavadoc=flyway-core/target/flyway-core-%VERSION%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-core/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
+
+echo ============== DEPLOYING %2 GCP BIGQUERY TO %RELEASE_REPOSITORY_URL%
+call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-gcp-bigquery/target/flyway-gcp-bigquery-%VERSION%-beta.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-gcp-bigquery -Dversion=%VERSION%-beta -Dpackaging=jar -Djavadoc=flyway-gcp-bigquery/target/flyway-gcp-bigquery-%VERSION%-beta-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-gcp-bigquery/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
+
+echo ============== DEPLOYING %2 GCP SPANNER TO %RELEASE_REPOSITORY_URL%
+call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-gcp-spanner/target/flyway-gcp-spanner-%VERSION%-beta.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-gcp-spanner -Dversion=%VERSION%-beta -Dpackaging=jar -Djavadoc=flyway-gcp-spanner/target/flyway-gcp-spanner-%VERSION%-beta-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-gcp-bigquery/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
+
+echo ============== DEPLOYING %2 GRADLE PLUGIN TO %RELEASE_REPOSITORY_URL%
+call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-gradle-plugin/target/flyway-gradle-plugin-%VERSION%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-gradle-plugin -Dversion=%VERSION% -Dpackaging=jar -Djavadoc=flyway-gradle-plugin/target/flyway-gradle-plugin-%VERSION%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-gradle-plugin/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
+
+echo ============== DEPLOYING %2 MAVEN PLUGIN TO %RELEASE_REPOSITORY_URL%
+call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-maven-plugin/target/flyway-maven-plugin-%VERSION%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-maven-plugin -Dversion=%VERSION% -Dpackaging=jar -Djavadoc=flyway-maven-plugin/target/flyway-maven-plugin-%VERSION%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-maven-plugin/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
+
+echo ============== DEPLOYING %2 COMMANDLINE TO %RELEASE_REPOSITORY_URL%
+call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-commandline/target/flyway-commandline-%VERSION%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-commandline -Dversion=%VERSION% -Dpackaging=jar -Djavadoc=flyway-commandline/target/flyway-commandline-%VERSION%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=flyway-commandline/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-commandline/target/flyway-commandline-%VERSION%-windows-x64.zip -DgroupId=%GROUP_ID% -DartifactId=flyway-commandline -Dversion=%VERSION% -Dpackaging=zip -DgeneratePom=false -Dclassifier=windows-x64 -DperformRelease=true -Dsources=%FAKE_SOURCES% || goto :error
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-commandline/target/flyway-commandline-%VERSION%-linux-x64.tar.gz -DgroupId=%GROUP_ID% -DartifactId=flyway-commandline -Dversion=%VERSION% -Dpackaging=tar.gz -DgeneratePom=false -Dclassifier=linux-x64 -DperformRelease=true -Dsources=%FAKE_SOURCES% || goto :error
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-commandline/target/flyway-commandline-%VERSION%-macosx-x64.tar.gz -DgroupId=%GROUP_ID% -DartifactId=flyway-commandline -Dversion=%VERSION% -Dpackaging=tar.gz -DgeneratePom=false -Dclassifier=macosx-x64 -DperformRelease=true -Dsources=%FAKE_SOURCES% || goto :error
