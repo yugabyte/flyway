@@ -41,7 +41,7 @@ if NOT [%FLYWAY_BETA%]==[] (
 
 echo ============== RUNNING OSSIFIER
 cd "%FLYWAY_RELEASE_DIR%\flyway-main\master-only\flyway-ossifier"
-@REM Ossifier reads the OSSIFY_TEST_MODE environment variable
+@REM OSSifier reads the OSSIFY_TEST_MODE environment variable
 call mvn clean compile exec:java -Dexec.mainClass="com.boxfuse.flyway.ossifier.OSSifier" -Dexec.args="%FLYWAY_RELEASE_DIR% %FLYWAY_RELEASE_DIR%/flyway-main" -DskipTests -DskipITs || goto :error
 
 echo ============== BUILDING ENTERPRISE
