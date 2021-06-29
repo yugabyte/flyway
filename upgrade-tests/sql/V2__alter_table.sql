@@ -1,1 +1,0 @@
-ALTER TABLE tutorials_tbl ADD subtitle VARCHAR(50);

@@ -1,1 +1,0 @@
-DROP TABLE tutorials_tbl;

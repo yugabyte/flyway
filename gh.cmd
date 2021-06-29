@@ -30,49 +30,50 @@ if [%2]==[] (
   set OSSIFY_TEST_MODE=%2
 )
 
-SET CURRENT_DIR=%cd%
-SET SETTINGS_FILE=%CURRENT_DIR%/settings.xml
+SET FLYWAY_RELEASE_DIR=%cd%
+SET SETTINGS_FILE=%FLYWAY_RELEASE_DIR%/settings.xml
 
 echo ============== GH START (Git Branch: %FLYWAY_BRANCH%)
 
-echo ============== DELETING EXISTING GH REPO
-cd ..
-if exist flyway (
-  rmdir flyway /s /q || goto :error
-)
-cd "%CURRENT_DIR%"
-
 echo ============== CLONING
-call clone.cmd %FLYWAY_BRANCH% || goto :error
+git clone -b %FLYWAY_BRANCH% https://github.com/red-gate/flyway-main.git || goto :error
 
 echo ============== BUILDING MAIN
-
-cd flyway-main
+cd "%FLYWAY_RELEASE_DIR%\flyway-main"
 call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests -DskipITs || goto :error
-cd ..
 
-echo ============== BUILDING EDITIONS
-call buildEdition.cmd %OSSIFY_TEST_MODE% || goto :error
+echo ============== RUNNING OSSIFIER
+cd "%FLYWAY_RELEASE_DIR%\flyway-main\master-only\flyway-ossifier"
+@REM Ossifier reads the OSSIFY_TEST_MODE environment variable
+call mvn clean compile exec:java -Dexec.mainClass="com.boxfuse.flyway.ossifier.OSSifier" -Dexec.args="%FLYWAY_RELEASE_DIR% %FLYWAY_RELEASE_DIR%/flyway-main" -DskipTests -DskipITs || goto :error
+
+echo ============== BUILDING ENTERPRISE
+cd "%FLYWAY_RELEASE_DIR%\flyway-enterprise"
+call mvn -s %SETTINGS_FILE% -U dependency:purge-local-repository clean install -DskipTests -DskipITs || goto :error
+call mvn -s %SETTINGS_FILE% -Pbuild-assemblies clean install javadoc:jar -T3 -DskipTests -DskipITs || goto :error
+
+echo ============== BUILDING COMMUNITY
+cd "%FLYWAY_RELEASE_DIR%\flyway"
+call mvn -s %SETTINGS_FILE% -U dependency:purge-local-repository clean install -DskipTests -DskipITs || goto :error
+call mvn -s %SETTINGS_FILE% -Pbuild-assemblies clean install javadoc:jar -T3 -DskipTests -DskipITs || goto :error
 
 echo ============== CHECKING OUT CURRENT GH REPO (Git Branch: %FLYWAY_BRANCH%)
-SET FLYWAY_RELEASE_DIR=%cd%
-cd ..
-git clone -b %FLYWAY_BRANCH% https://github.com/flyway/flyway --depth=1 || goto :error
+git clone -b %FLYWAY_BRANCH% https://github.com/flyway/flyway --depth=1 flyway-public || goto :error
 
 echo ============== DELETING EXISTING GH SOURCES
-DEL /Q flyway\*.* || goto :error
-DEL /S /Q flyway\.mvn || goto :error
-DEL /S /Q flyway\flyway-core || goto :error
-DEL /S /Q flyway\flyway-commandline || goto :error
-DEL /S /Q flyway\flyway-maven-plugin || goto :error
-DEL /S /Q flyway\flyway-gradle-plugin || goto :error
+DEL /Q flyway-public\*.* || goto :error
+DEL /S /Q flyway-public\.mvn || goto :error
+DEL /S /Q flyway-public\flyway-core || goto :error
+DEL /S /Q flyway-public\flyway-commandline || goto :error
+DEL /S /Q flyway-public\flyway-maven-plugin || goto :error
+DEL /S /Q flyway-public\flyway-gradle-plugin || goto :error
 
 echo ============== COPYING OSSIFIED SOURCES
-robocopy %FLYWAY_RELEASE_DIR%\flyway flyway /s /e /XD target
+robocopy %FLYWAY_RELEASE_DIR%\flyway flyway-public /s /e /XD target
 IF %ERRORLEVEL% NEQ 3 goto :error
 
 echo ============== SHOW STATUS
-cd flyway
+cd %FLYWAY_RELEASE_DIR%\flyway-public
 git status || goto :error
 git --no-pager diff || goto :error
 
@@ -81,12 +82,12 @@ git add .
 git diff --cached --output=%FLYWAY_RELEASE_DIR%\changes.patch || goto :error
 
 echo ============== GH SUCCESS
-cd "%CURRENT_DIR%"
+cd "%FLYWAY_RELEASE_DIR%"
 goto :EOF
 
 :error
 set ERRORLVL=%errorlevel%
 echo ============== GH FAILED WITH ERROR %ERRORLVL%
-cd "%CURRENT_DIR%"
+cd "%FLYWAY_RELEASE_DIR%"
 pause
 exit /b %ERRORLVL%

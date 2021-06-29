@@ -1,1 +1,0 @@
-ALTER TABLE tutorials_tbl DROP COLUMN subtitle;
