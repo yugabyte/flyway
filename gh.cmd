@@ -44,7 +44,7 @@ call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests -DskipITs |
 
 echo ============== RUNNING OSSIFIER
 cd "%FLYWAY_RELEASE_DIR%\flyway-main\master-only\flyway-ossifier"
-@REM Ossifier reads the OSSIFY_TEST_MODE environment variable
+@REM OSSifier reads the OSSIFY_TEST_MODE environment variable
 call mvn clean compile exec:java -Dexec.mainClass="com.boxfuse.flyway.ossifier.OSSifier" -Dexec.args="%FLYWAY_RELEASE_DIR% %FLYWAY_RELEASE_DIR%/flyway-main" -DskipTests -DskipITs || goto :error
 
 echo ============== BUILDING ENTERPRISE
@@ -57,10 +57,10 @@ cd "%FLYWAY_RELEASE_DIR%\flyway"
 call mvn -s %SETTINGS_FILE% -U dependency:purge-local-repository clean install -DskipTests -DskipITs || goto :error
 call mvn -s %SETTINGS_FILE% -Pbuild-assemblies clean install javadoc:jar -T3 -DskipTests -DskipITs || goto :error
 
-echo ============== CHECKING OUT CURRENT GH REPO (Git Branch: %FLYWAY_BRANCH%)
+echo ============== CHECKING OUT CURRENT FLYWAY PUBLIC (Git Branch: %FLYWAY_BRANCH%)
 git clone -b %FLYWAY_BRANCH% https://github.com/flyway/flyway --depth=1 flyway-public || goto :error
 
-echo ============== DELETING EXISTING GH SOURCES
+echo ============== DELETING EXISTING FLYWAY PUBLIC SOURCES
 DEL /Q flyway-public\*.* || goto :error
 DEL /S /Q flyway-public\.mvn || goto :error
 DEL /S /Q flyway-public\flyway-core || goto :error
