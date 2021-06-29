@@ -58,13 +58,15 @@ echo ============== BUILDING MAIN
 cd "%FLYWAY_RELEASE_DIR%\flyway-main"
 call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies -Prepo-proxy-release deploy scm:tag -DperformRelease=true -DskipTests -DskipITs || goto :error
 
+echo ============== DEPLOYING
+SET PACKAGES="flyway-core,flyway-gradle-plugin,flyway-maven-plugin,flyway-commandline,flyway-community-db-support,flyway-gcp-bigquery,flyway-gcp-spanner"
+
 echo ============== DEPLOYING COMMUNITY
 cd "%FLYWAY_RELEASE_DIR%\flyway"
-call mvn -s "%SETTINGS_FILE%" -Psonatype-release -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests -DskipITs || goto :error
+call mvn -s "%SETTINGS_FILE%" -Psonatype-release -Pbuild-assemblies deploy scm:tag -DperformRelease=true -DskipTests -DskipITs -pl %PACKAGES% -am || goto :error
 
 echo ============== DEPLOYING ENTERPRISE TO %RELEASE_REPOSITORY_URL%
 cd "%FLYWAY_RELEASE_DIR%\flyway-enterprise"
-SET PACKAGES="flyway-core,flyway-gradle-plugin,flyway-maven-plugin,flyway-commandline,flyway-gcp-bigquery,flyway-gcp-spanner"
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=pom.xml -DgroupId=%GROUP_ID% -DartifactId=flyway-parent -Dversion=%VERSION% -Dpackaging=pom -DupdateReleaseInfo=true -Dsources=%FAKE_SOURCES% || goto :error
 for /F "tokens=1* delims=," %%f in ("%PACKAGES%") do (
   if exists %%f/target/%%f-%VERSION%-BETA.jar (
