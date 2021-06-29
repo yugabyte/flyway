@@ -36,7 +36,7 @@ echo ============== VERSIONING MAIN
 cd "%FLYWAY_RELEASE_DIR%\flyway-main"
 call mvn versions:set -DnewVersion=%VERSION% || goto :error
 if NOT [%FLYWAY_BETA%]==[] (
-call mvn versions:set -DnewVersion=%VERSION% -pl %FLYWAY_BETA% || goto :error
+  call mvn versions:set -DnewVersion=%VERSION%-BETA -pl %FLYWAY_BETA% || goto :error
 )
 
 echo ============== RUNNING OSSIFIER
