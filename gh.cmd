@@ -39,21 +39,21 @@ echo ============== CLONING
 git clone -b %FLYWAY_BRANCH% https://github.com/red-gate/flyway-main.git || goto :error
 
 echo ============== BUILDING MAIN
-cd "%FLYWAY_RELEASE_DIR%\flyway-main"
+cd %FLYWAY_RELEASE_DIR%\flyway-main
 call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies install -DskipTests -DskipITs || goto :error
 
 echo ============== RUNNING OSSIFIER
-cd "%FLYWAY_RELEASE_DIR%\flyway-main\master-only\flyway-ossifier"
+cd %FLYWAY_RELEASE_DIR%\flyway-main\master-only\flyway-ossifier
 @REM OSSifier reads the OSSIFY_TEST_MODE environment variable
 call mvn clean compile exec:java -Dexec.mainClass="com.boxfuse.flyway.ossifier.OSSifier" -Dexec.args="%FLYWAY_RELEASE_DIR% %FLYWAY_RELEASE_DIR%/flyway-main" -DskipTests -DskipITs || goto :error
 
 echo ============== BUILDING ENTERPRISE
-cd "%FLYWAY_RELEASE_DIR%\flyway-enterprise"
+cd %FLYWAY_RELEASE_DIR%\flyway-enterprise
 call mvn -s %SETTINGS_FILE% -U dependency:purge-local-repository clean install -DskipTests -DskipITs || goto :error
 call mvn -s %SETTINGS_FILE% -Pbuild-assemblies clean install javadoc:jar -T3 -DskipTests -DskipITs || goto :error
 
 echo ============== BUILDING COMMUNITY
-cd "%FLYWAY_RELEASE_DIR%\flyway"
+cd %FLYWAY_RELEASE_DIR%\flyway
 call mvn -s %SETTINGS_FILE% -U dependency:purge-local-repository clean install -DskipTests -DskipITs || goto :error
 call mvn -s %SETTINGS_FILE% -Pbuild-assemblies clean install javadoc:jar -T3 -DskipTests -DskipITs || goto :error
 
@@ -82,12 +82,12 @@ git add .
 git diff --cached --output=%FLYWAY_RELEASE_DIR%\changes.patch || goto :error
 
 echo ============== GH SUCCESS
-cd "%FLYWAY_RELEASE_DIR%"
+cd %FLYWAY_RELEASE_DIR%
 goto :EOF
 
 :error
 set ERRORLVL=%errorlevel%
 echo ============== GH FAILED WITH ERROR %ERRORLVL%
-cd "%FLYWAY_RELEASE_DIR%"
+cd %FLYWAY_RELEASE_DIR%
 pause
 exit /b %ERRORLVL%
