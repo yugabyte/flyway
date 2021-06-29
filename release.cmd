@@ -34,11 +34,11 @@ call mvn -s "%SETTINGS_FILE%" -Pbuild-assemblies -Prepo-proxy-release deploy scm
 cd ..
 
 echo ============== DEPLOYING
-@REM call deploy.cmd %1 %FLYWAY_BRANCH% || goto :error
-@REM cd gradle-plugin-publishing
-@REM call gradlew -b release-community.gradle clean publishPlugins -Dversion=%1 -Dgradle.publish.key=%FLYWAY_GRADLE_KEY% -Dgradle.publish.secret=%FLYWAY_GRADLE_SECRET% || goto :error
-@REM call gradlew -b release-enterprise.gradle clean publishPlugins -Dversion=%1 -Dgradle.publish.key=%FLYWAY_GRADLE_KEY% -Dgradle.publish.secret=%FLYWAY_GRADLE_SECRET% || goto :error
-@REM cd ..
+call deploy.cmd %1 %FLYWAY_BRANCH% || goto :error
+cd gradle-plugin-publishing
+call gradlew -b release-community.gradle clean publishPlugins -Dversion=%1 -Dgradle.publish.key=%FLYWAY_GRADLE_KEY% -Dgradle.publish.secret=%FLYWAY_GRADLE_SECRET% || goto :error
+call gradlew -b release-enterprise.gradle clean publishPlugins -Dversion=%1 -Dgradle.publish.key=%FLYWAY_GRADLE_KEY% -Dgradle.publish.secret=%FLYWAY_GRADLE_SECRET% || goto :error
+cd ..
 
 echo ============== RELEASE SUCCESS
 cd "%CURRENT_DIR%"
