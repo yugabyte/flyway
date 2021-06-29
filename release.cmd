@@ -67,11 +67,11 @@ cd "%FLYWAY_RELEASE_DIR%\flyway-enterprise"
 SET PACKAGES="flyway-core,flyway-gradle-plugin,flyway-maven-plugin,flyway-commandline,flyway-gcp-bigquery,flyway-gcp-spanner"
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=pom.xml -DgroupId=%GROUP_ID% -DartifactId=flyway-parent -Dversion=%VERSION% -Dpackaging=pom -DupdateReleaseInfo=true -Dsources=%FAKE_SOURCES% || goto :error
 for /F "tokens=1* delims=," %%f in ("%PACKAGES%") do (
-if exists %%f/target/%%f-%VERSION%-BETA.jar (
-%QUALIFIER%=-BETA
-)
-call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=%%f/target/%%f-%VERSION%%QUALIFIER%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-core -Dversion=%VERSION%%QUALIFIER% -Dpackaging=jar -Djavadoc=%%f/target/%%f-%VERSION%%QUALIFIER%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=%%f/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
-%QUALIFIER%=""
+  if exists %%f/target/%%f-%VERSION%-BETA.jar (
+    %QUALIFIER%=-BETA
+  )
+  call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=%%f/target/%%f-%VERSION%%QUALIFIER%.jar -DgroupId=%GROUP_ID% -DartifactId=flyway-core -Dversion=%VERSION%%QUALIFIER% -Dpackaging=jar -Djavadoc=%%f/target/%%f-%VERSION%%QUALIFIER%-javadoc.jar -Dsources=%FAKE_SOURCES% -DpomFile=%%f/pom.xml -DupdateReleaseInfo=true -DperformRelease=true || goto :error
+  %QUALIFIER%=""
 )
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-commandline/target/flyway-commandline-%VERSION%-windows-x64.zip -DgroupId=%GROUP_ID% -DartifactId=flyway-commandline -Dversion=%VERSION% -Dpackaging=zip -DgeneratePom=false -Dclassifier=windows-x64 -DperformRelease=true -Dsources=%FAKE_SOURCES% || goto :error
 call mvn -s "%SETTINGS_FILE%" -f pom.xml gpg:sign-and-deploy-file -P%PROFILE% -DrepositoryId=%RELEASE_REPOSITORY_ID% -Durl=%RELEASE_REPOSITORY_URL% -Dfile=flyway-commandline/target/flyway-commandline-%VERSION%-linux-x64.tar.gz -DgroupId=%GROUP_ID% -DartifactId=flyway-commandline -Dversion=%VERSION% -Dpackaging=tar.gz -DgeneratePom=false -Dclassifier=linux-x64 -DperformRelease=true -Dsources=%FAKE_SOURCES% || goto :error
